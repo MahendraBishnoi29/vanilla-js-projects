@@ -4,8 +4,33 @@ const backdrop = document.getElementById("backdrop");
 const cancel = addMovieModal.querySelector(".btn--passive");
 const confirm = cancel.nextElementSibling;
 const userInputs = document.querySelectorAll("input");
+const entryText = document.getElementById("entry-text");
 
 const movies = [];
+
+const updateUI = () => {
+  if (movies.length === 0) {
+    entryText.style.display = "block";
+  } else {
+    entryText.style.display = "none";
+  }
+};
+
+const renderNewMovie = (title, imageUrl, rating) => {
+  const newMovieElm = document.createElement("li");
+  newMovieElm.className = "movie-element";
+  newMovieElm.innerHTML = `
+  <div class="movie-element__image">
+   <img src="${imageUrl}" alt="${title}">
+  </div>
+  <div class="movie-element__info">
+   <h2>${title}</h2>
+   <p>${rating}/5 stars</p>
+  </div>
+    `;
+  const rootList = document.getElementById("movie-list");
+  rootList.append(newMovieElm);
+};
 
 const showBackdrop = () => {
   backdrop.classList.toggle("visible");
@@ -46,6 +71,8 @@ const handleSubmit = () => {
   movies.push(newMovie);
   handleClose();
   clearInputs();
+  renderNewMovie(newMovie.title, newMovie.img, newMovie.rating);
+  updateUI();
 };
 
 startAddMovie.addEventListener("click", toggleModal);
